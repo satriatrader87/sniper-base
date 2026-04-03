@@ -33,6 +33,6 @@
   "dependencies": {
     "@aave/core-v3": "^1.19.3",
     "@openzeppelin/contracts": "^5.6.1",
-    "ethers": "^6.11.1"
+    "ethers": "^6.16.0"
   }
 }
