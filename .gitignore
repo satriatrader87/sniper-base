@@ -34,7 +34,7 @@ coverage.json
 # --- HARDHAT IGNITION ---
 # Jangan upload deployment data yang berisi info wallet lokal
 ignition/deployments/
-
+ignition/
 # --- OS JUNK (SAMPAH SISTEM) ---
 .DS_Store
 Thumbs.db
