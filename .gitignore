@@ -19,3 +19,37 @@
 # Hardhat coverage reports
 /coverage
 .env
+# Dependency (Folder library yang sangat berat, tidak perlu di-upload)
+node_modules/
+jspm_packages/
+
+# File Rahasia (SANGAT PENTING: Jangan hapus baris ini!)
+.env
+.env.local
+.env.setup
+.secret
+secrets.json
+
+# Hasil Kompilasi Hardhat (Bisa dibuat ulang dengan npx hardhat compile)
+artifacts/
+cache/
+typechain/
+typechain-types/
+
+# Hasil Build TypeScript
+dist/
+out/
+
+# Log Error & Debugging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# File Sistem (Sampah dari Windows/Mac)
+.DS_Store
+Thumbs.db
+
+# Hardhat Ignition (Jika kamu pakai fitur deployment baru)
+ignition/deployments/
