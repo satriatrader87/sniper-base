@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "rootDir": ".",                       // TAMBAHKAN BARIS INI
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "outDir": "dist"
+  },
+  "include": ["scripts/**/*", "contracts/**/*"],
+  "exclude": ["node_modules"]
+}
