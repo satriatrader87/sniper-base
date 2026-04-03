@@ -11,8 +11,8 @@ import { TOKENS } from "./addresses";
 export const CONFIG = {
     LOAN_ASSET: TOKENS.USDC,
     LOAN_DECIMALS: 6,
-    LOAN_AMOUNT_RAW: "50000",      // Pinjam $50k
-    MIN_PROFIT_TRIGGER: 45.0,      // Minimal cuan $45
+    LOAN_AMOUNT_RAW: "100",      // Pinjam $50k
+    MIN_PROFIT_TRIGGER: 10.0,      // Minimal cuan $45
     GAS_LIMIT_GWEI: "0.1",         // Proteksi gas (Base sangat murah)
     STOP_LOSS_ETH: "0.002",        // Sisakan minimal 0.002 ETH di wallet
 };
