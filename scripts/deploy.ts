@@ -8,27 +8,25 @@ async function main() {
     console.log("--------------------------------------------------");
     console.log("🚀 MEMULAI DEPLOY KONTRAK FLASH ARB V1...");
     
-    // 1. Ambil alamat dari .env dan paksa jadi lowercase agar tidak error checksum
-    const rawPool = process.env.AAVE_POOL_PROVIDER || "";
-    const rawRouter = process.env.AERODROME_ROUTER || "";
+    // 1. Ambil alamat dari .env
+    // Gunakan ethers.getAddress() untuk validasi otomatis & konversi ke Checksum format
+    let poolAddress, routerAddress;
 
-    const poolAddress = rawPool.trim().toLowerCase();
-    const routerAddress = rawRouter.trim().toLowerCase();
-
-    // Validasi dasar
-    if (!poolAddress || !routerAddress || poolAddress === "" || routerAddress === "") {
-        throw new Error("❌ ERROR: Alamat AAVE_POOL_PROVIDER atau AERODROME_ROUTER kosong di .env!");
+    try {
+        poolAddress = ethers.getAddress(process.env.AAVE_POOL_PROVIDER || "");
+        routerAddress = ethers.getAddress(process.env.AERODROME_ROUTER || "");
+    } catch (e) {
+        throw new Error("❌ ERROR: Alamat AAVE_POOL_PROVIDER atau AERODROME_ROUTER di .env TIDAK VALID!");
     }
 
     // 2. Ambil data deployer
     const [deployer] = await ethers.getSigners();
     const balance = await ethers.provider.getBalance(deployer.address);
 
-    console.log(`📍 Network      : Base Sepolia (Testnet)`);
-    console.log(`👤 Deployer     : ${deployer.address}`);
-    console.log(`💰 Saldo Wallet : ${ethers.formatEther(balance)} ETH`);
-    console.log(`🎯 Target Pool  : ${poolAddress}`);
-    console.log(`🎯 Target Router: ${routerAddress}`);
+    console.log(`👤 Deployer      : ${deployer.address}`);
+    console.log(`💰 Saldo Wallet  : ${ethers.formatEther(balance)} ETH`);
+    console.log(`🎯 Target Pool   : ${poolAddress}`);
+    console.log(`🎯 Target Router : ${routerAddress}`);
     console.log("--------------------------------------------------");
 
     // 3. Ambil kontrak Factory
@@ -38,18 +36,16 @@ async function main() {
     console.log("⏳ Mengirim transaksi deploy ke blockchain...");
     
     try {
-        // Kita kirim alamat yang sudah di-lowercase-kan
-        const contract = await FlashArb.deploy(poolAddress, routerAddress, {
-            gasLimit: 3000000 
-        });
+        // Deploy dengan alamat yang sudah divalidasi
+        const contract = await FlashArb.deploy(poolAddress, routerAddress);
 
-        console.log("⏳ Menunggu konfirmasi transaksi...");
+        console.log("⏳ Menunggu konfirmasi transaksi (Block Confirmation)...");
         await contract.waitForDeployment();
 
         const deployedAddress = await contract.getAddress();
 
         console.log("--------------------------------------------------");
-        console.log("✅ BERHASIL! Kontrak kamu sudah live di Base Sepolia.");
+        console.log("✅ BERHASIL! Kontrak kamu sudah live.");
         console.log(`🔥 ALAMAT KONTRAK: ${deployedAddress}`);
         console.log("--------------------------------------------------");
         console.log("👉 LANGKAH SELANJUTNYA:");
@@ -58,8 +54,13 @@ async function main() {
         console.log(`3. Jalankan bot: npx ts-node scripts/bot.ts`);
         console.log("--------------------------------------------------");
     } catch (error) {
-        console.error("❌ DEPLOY GAGAL DI TENGAH JALAN:");
-        console.error(error.message);
+        console.error("❌ DEPLOY GAGAL:");
+        // Penanganan error jika properti message tidak ada
+        if (error instanceof Error) {
+            console.error(error.message);
+        } else {
+            console.error(error);
+        }
     }
 }
 
