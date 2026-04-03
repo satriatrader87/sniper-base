@@ -3,13 +3,15 @@ pragma solidity 0.8.20;
 
 import "@aave/core-v3/contracts/flashloan/base/FlashLoanSimpleReceiverBase.sol";
 import "@aave/core-v3/contracts/interfaces/IPoolAddressesProvider.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /**
  * @dev Jika pindah ke Uniswap, ganti interface IAerodromeRouter di bawah ini.
  */
 interface IAerodromeRouter {
     struct Route { address from; address to; bool stable; }
-    function swapExactTokensForTokens(uint in, uint outMin, Route[] calldata r, address to, uint d) external returns (uint[] memory a);
+    // Variabel 'in' sudah diganti jadi 'amountIn'
+    function swapExactTokensForTokens(uint amountIn, uint outMin, Route[] calldata r, address to, uint d) external returns (uint[] memory a);
 }
 
 contract FlashArbV1 is FlashLoanSimpleReceiverBase {
