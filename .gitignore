@@ -1,55 +1,40 @@
-# Node modules
-/node_modules
-
-# Compilation output
-/dist
-
-# pnpm deploy output
-/bundle
-
-# Hardhat Build Artifacts
-/artifacts
-
-# Hardhat compilation (v2) support directory
-/cache
-
-# Typechain output
-/types
-
-# Hardhat coverage reports
-/coverage
-.env
-# Dependency (Folder library yang sangat berat, tidak perlu di-upload)
-node_modules/
-jspm_packages/
-
-# File Rahasia (SANGAT PENTING: Jangan hapus baris ini!)
+# --- KUNCI RAHASIA (WAJIB) ---
 .env
 .env.local
 .env.setup
 .secret
 secrets.json
 
-# Hasil Kompilasi Hardhat (Bisa dibuat ulang dengan npx hardhat compile)
+# --- DEPENDENCIES (FOLDER BERAT) ---
+node_modules/
+jspm_packages/
+
+# --- HARDHAT & TYPESCRIPT BUILD ---
+# Folder ini otomatis dibuat saat npx hardhat compile
 artifacts/
 cache/
+dist/
+out/
+bundle/
+types/
 typechain/
 typechain-types/
 
-# Hasil Build TypeScript
-dist/
-out/
-
-# Log Error & Debugging
+# --- LOGS & ERROR REPORTS ---
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-logs/
-*.log
 
-# File Sistem (Sampah dari Windows/Mac)
+# --- TESTING & COVERAGE ---
+coverage/
+coverage.json
+
+# --- HARDHAT IGNITION ---
+# Jangan upload deployment data yang berisi info wallet lokal
+ignition/deployments/
+
+# --- OS JUNK (SAMPAH SISTEM) ---
 .DS_Store
 Thumbs.db
-
-# Hardhat Ignition (Jika kamu pakai fitur deployment baru)
-ignition/deployments/
