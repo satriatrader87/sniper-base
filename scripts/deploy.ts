@@ -8,18 +8,19 @@ async function main() {
     console.log("--------------------------------------------------");
     console.log("🚀 MEMULAI DEPLOY KONTRAK FLASH ARB V1...");
     
-    // 1. Ambil alamat dari .env
-    // Gunakan ethers.getAddress() untuk validasi otomatis & konversi ke Checksum format
+    // 1. Ambil & Validasi alamat dari .env
     let poolAddress, routerAddress;
 
     try {
+        // ethers.getAddress() memastikan format Checksum (case-sensitive valid)
         poolAddress = ethers.getAddress(process.env.AAVE_POOL_PROVIDER || "");
         routerAddress = ethers.getAddress(process.env.AERODROME_ROUTER || "");
     } catch (e) {
-        throw new Error("❌ ERROR: Alamat AAVE_POOL_PROVIDER atau AERODROME_ROUTER di .env TIDAK VALID!");
+        console.error("❌ ERROR: Alamat di .env TIDAK VALID (Cek AAVE_POOL_PROVIDER / AERODROME_ROUTER)");
+        process.exit(1);
     }
 
-    // 2. Ambil data deployer
+    // 2. Ambil data deployer (Wallet yang membayar gas)
     const [deployer] = await ethers.getSigners();
     const balance = await ethers.provider.getBalance(deployer.address);
 
@@ -36,10 +37,10 @@ async function main() {
     console.log("⏳ Mengirim transaksi deploy ke blockchain...");
     
     try {
-        // Deploy dengan alamat yang sudah divalidasi
+        // Deploy kontrak
         const contract = await FlashArb.deploy(poolAddress, routerAddress);
 
-        console.log("⏳ Menunggu konfirmasi transaksi (Block Confirmation)...");
+        console.log("⏳ Menunggu konfirmasi blok...");
         await contract.waitForDeployment();
 
         const deployedAddress = await contract.getAddress();
@@ -55,16 +56,19 @@ async function main() {
         console.log("--------------------------------------------------");
     } catch (error) {
         console.error("❌ DEPLOY GAGAL:");
-        // Penanganan error jika properti message tidak ada
         if (error instanceof Error) {
-            console.error(error.message);
+            // Cek jika error karena saldo tidak cukup
+            if (error.message.includes("insufficient funds")) {
+                console.error("Saldo ETH tidak cukup untuk bayar GAS!");
+            } else {
+                console.error(error.message);
+            }
         } else {
             console.error(error);
         }
     }
 }
 
-// Eksekusi fungsi main
 main().catch((error) => {
     console.error("❌ ERROR FATAL:");
     console.error(error);
